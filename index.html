@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Metals Market Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Metals Market Tracker</h1>
+    <p class="sub">Precious, industrial, and rare earth metals used in electronics.
+      <span id="status" class="status">Loading…</span></p>
+  </header>
+
+  <main>
+    <section>
+      <div class="section-head">
+        <h2>Precious &amp; industrial metals</h2>
+        <button id="refresh" type="button">Refresh now</button>
+      </div>
+      <p class="hint">Live spot prices from <a href="https://gold-api.com" target="_blank" rel="noopener">gold-api.com</a>, refreshed every minute.
+        Charts combine the daily history in <code>data/history.json</code> with prices recorded while this page is open.</p>
+      <div id="live-grid" class="grid"></div>
+    </section>
+
+    <section>
+      <h2>Rare earth &amp; electronics metals</h2>
+      <p class="hint">There is no free public price feed for rare earths. Prices come from <code>data/rare-earths.json</code>
+        plus any you add below (saved in this browser). Good sources: Shanghai Metals Market, Asian Metal, Fastmarkets.</p>
+      <div id="rare-grid" class="grid"></div>
+    </section>
+  </main>
+
+  <footer>Prices are indicative and for information only — not financial advice.</footer>
+
+  <template id="card-template">
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <h3 class="name"></h3>
+          <p class="use"></p>
+        </div>
+        <div class="quote">
+          <div class="price">—</div>
+          <div class="change"></div>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas></canvas><p class="empty">No price data yet.</p></div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "note": "Rare earth metals have no free public price API. Add observations here (or via the form on the site) from a source you trust, e.g. Shanghai Metals Market, Asian Metal, or Fastmarkets. Each entry: { \"date\": \"YYYY-MM-DD\", \"price\": number }.",
+  "metals": {
+    "NdPr": { "name": "NdPr oxide", "unit": "USD/kg", "use": "Permanent magnets (motors, speakers, hard drives)", "prices": [] },
+    "Nd":   { "name": "Neodymium metal", "unit": "USD/kg", "use": "NdFeB magnets", "prices": [] },
+    "Dy":   { "name": "Dysprosium oxide", "unit": "USD/kg", "use": "High-temperature magnets", "prices": [] },
+    "Tb":   { "name": "Terbium oxide", "unit": "USD/kg", "use": "Magnets, phosphors", "prices": [] },
+    "Ga":   { "name": "Gallium", "unit": "USD/kg", "use": "GaN / GaAs semiconductors, LEDs", "prices": [] },
+    "Ge":   { "name": "Germanium", "unit": "USD/kg", "use": "Fiber optics, infrared optics", "prices": [] },
+    "In":   { "name": "Indium", "unit": "USD/kg", "use": "ITO touchscreens and displays", "prices": [] }
+  }
+}

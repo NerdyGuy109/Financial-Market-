@@ -1,0 +1,63 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1b1f24;
+  --muted: #5f6b7a;
+  --border: #e1e5ea;
+  --accent: #2a6fdb;
+  --up: #1a7f37;
+  --down: #c62828;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111418;
+    --surface: #1a1e24;
+    --text: #e6e9ed;
+    --muted: #96a1ae;
+    --border: #2b313a;
+    --accent: #6ea2ff;
+    --up: #4cc26a;
+    --down: #ff6b6b;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+header, main, footer { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+header { padding-top: 28px; }
+h1 { margin: 0; font-size: 1.7rem; }
+h2 { margin: 0; font-size: 1.2rem; }
+h3 { margin: 0; font-size: 1rem; }
+.sub, .hint, .use { color: var(--muted); }
+.sub { margin: 4px 0 0; }
+.hint { margin: 6px 0 14px; font-size: 0.9rem; }
+.status { margin-left: 8px; font-size: 0.85rem; }
+.status.error { color: var(--down); }
+section { margin-top: 32px; }
+.section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+a { color: var(--accent); }
+code { font-size: 0.85em; }
+button {
+  background: var(--accent); color: #fff; border: 0; border-radius: 6px;
+  padding: 6px 12px; font: inherit; font-size: 0.9rem; cursor: pointer;
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+@media (max-width: 400px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; min-width: 0; }
+.card-head { display: flex; justify-content: space-between; gap: 12px; }
+.use { margin: 2px 0 0; font-size: 0.82rem; }
+.quote { text-align: right; white-space: nowrap; }
+.price { font-size: 1.25rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.change { font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.change.up { color: var(--up); }
+.change.down { color: var(--down); }
+.chart-wrap { position: relative; height: 180px; margin-top: 10px; }
+.empty { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--muted); font-size: 0.9rem; }
+.add-form { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.add-form input { flex: 1 1 110px; min-width: 0; padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font: inherit; font-size: 0.85rem; }
+footer { color: var(--muted); font-size: 0.85rem; padding-top: 32px; padding-bottom: 32px; }
+.empty[hidden] { display: none; }
