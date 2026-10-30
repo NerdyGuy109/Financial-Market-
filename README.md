@@ -1,12 +1,15 @@
 # Metals Market Tracker
 
-A simple static website that tracks and plots prices of metals used in electronics:
+A simple static website that tracks and plots prices of metals used in electronics, plus cryptocurrencies:
 
-- **Live spot prices** (gold, silver, platinum, palladium, copper) from the free, keyless
-  [gold-api.com](https://gold-api.com) API, refreshed every minute.
+- **Live spot prices** (gold, silver, platinum, palladium, copper) and **crypto** (Bitcoin, Ethereum)
+  from the free, keyless [gold-api.com](https://gold-api.com) API, refreshed every minute.
 - **Rare earth & specialty metals** (NdPr, neodymium, dysprosium, terbium, gallium, germanium, indium).
   These have no free public price feed, so prices come from `data/rare-earths.json` plus any
   you enter on the page (saved in your browser).
+
+Each card has a ▾ button to show or hide its chart, and **Hide all charts** at the top collapses
+everything to a compact price list. Your choice is remembered in your browser.
 
 ## Run it
 
@@ -21,7 +24,7 @@ Or enable **GitHub Pages** (Settings → Pages → deploy from branch) to host i
 
 ## Price history
 
-- `data/history.json` holds daily snapshots of the live metals. The GitHub Action
+- `data/history.json` holds daily snapshots of the live prices. The GitHub Action
   `.github/workflows/update-prices.yml` appends one each weekday (or run it manually from the
   Actions tab). You can also run `python3 scripts/update_prices.py` locally.
 - While the page is open it also records live prices in your browser, so charts fill in over time.

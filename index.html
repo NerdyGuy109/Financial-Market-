@@ -10,8 +10,9 @@
 <body>
   <header>
     <h1>Metals Market Tracker</h1>
-    <p class="sub">Precious, industrial, and rare earth metals used in electronics.
+    <p class="sub">Precious, industrial, and rare earth metals used in electronics, plus cryptocurrencies.
       <span id="status" class="status">Loading…</span></p>
+    <button id="toggle-all" type="button" class="secondary">Hide all charts</button>
   </header>
 
   <main>
@@ -23,6 +24,12 @@
       <p class="hint">Live spot prices from <a href="https://gold-api.com" target="_blank" rel="noopener">gold-api.com</a>, refreshed every minute.
         Charts combine the daily history in <code>data/history.json</code> with prices recorded while this page is open.</p>
       <div id="live-grid" class="grid"></div>
+    </section>
+
+    <section>
+      <h2>Cryptocurrencies</h2>
+      <p class="hint">Live prices from the same feed, refreshed every minute.</p>
+      <div id="crypto-grid" class="grid"></div>
     </section>
 
     <section>
@@ -46,6 +53,7 @@
           <div class="price">—</div>
           <div class="change"></div>
         </div>
+        <button type="button" class="toggle" aria-expanded="true"><span aria-hidden="true">▾</span></button>
       </div>
       <div class="chart-wrap"><canvas></canvas><p class="empty">No price data yet.</p></div>
     </article>

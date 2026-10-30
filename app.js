@@ -1,9 +1,12 @@
-const LIVE_METALS = [
+// Assets with a live feed from gold-api.com; `grid` is the section each card goes in.
+const LIVE_ASSETS = [
   { symbol: "XAU", name: "Gold", unit: "USD/oz", use: "Connectors, bonding wire, contacts", color: "#c9a227" },
   { symbol: "XAG", name: "Silver", unit: "USD/oz", use: "Solder, conductive pastes, contacts", color: "#8c99a6" },
   { symbol: "XPT", name: "Platinum", unit: "USD/oz", use: "Hard-disk platters, sensors", color: "#5b8db8" },
   { symbol: "XPD", name: "Palladium", unit: "USD/oz", use: "Multilayer ceramic capacitors", color: "#9b6fc4" },
   { symbol: "HG", name: "Copper", unit: "USD/lb", use: "Wiring, PCBs, motors", color: "#c66b3d" },
+  { symbol: "BTC", name: "Bitcoin", unit: "USD", use: "Cryptocurrency", color: "#f7931a", grid: "crypto-grid" },
+  { symbol: "ETH", name: "Ethereum", unit: "USD", use: "Cryptocurrency", color: "#627eea", grid: "crypto-grid" },
 ];
 const RARE_COLORS = ["#2a9d8f", "#e76f51", "#7b6ce0", "#d4a017", "#3a86ff", "#e05a8a", "#6a994e"];
 const REFRESH_MS = 60_000;
@@ -36,8 +39,8 @@ function toPoints(entries) {
 
 function formatPrice(value, unit) {
   const digits = value < 10 ? 3 : 2;
-  return `$${value.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits })} ` +
-    `<small>${unit.replace("USD/", "/")}</small>`;
+  const per = unit.includes("/") ? ` <small>${unit.replace("USD/", "/")}</small>` : "";
+  return `$${value.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits })}${per}`;
 }
 
 function createCard(container, id, info) {
@@ -45,8 +48,37 @@ function createCard(container, id, info) {
   node.id = `card-${id}`;
   node.querySelector(".name").textContent = info.name;
   node.querySelector(".use").textContent = `${info.use} · ${info.unit}`;
+  const toggle = node.querySelector(".toggle");
+  toggle.setAttribute("aria-label", `Show or hide ${info.name} chart`);
+  toggle.addEventListener("click", () => setCollapsed(id, !node.classList.contains("collapsed")));
   container.appendChild(node);
+  setCollapsed(id, loadLocal("collapsed", {})[id] ?? false, false);
   return node;
+}
+
+// --- Show / hide charts (remembered in this browser) ---
+function setCollapsed(id, collapsed, save = true) {
+  const card = document.getElementById(`card-${id}`);
+  card.classList.toggle("collapsed", collapsed);
+  card.querySelector(".toggle").setAttribute("aria-expanded", String(!collapsed));
+  if (save) {
+    const state = loadLocal("collapsed", {});
+    state[id] = collapsed;
+    saveLocal("collapsed", state);
+  }
+  updateToggleAll();
+}
+
+function updateToggleAll() {
+  const cards = [...document.querySelectorAll(".card")];
+  const allCollapsed = cards.length > 0 && cards.every(c => c.classList.contains("collapsed"));
+  document.getElementById("toggle-all").textContent = allCollapsed ? "Show all charts" : "Hide all charts";
+}
+
+function toggleAll() {
+  const cards = [...document.querySelectorAll(".card")];
+  const collapse = !cards.every(c => c.classList.contains("collapsed"));
+  cards.forEach(c => setCollapsed(c.id.replace("card-", ""), collapse));
 }
 
 function renderCard(id, info, points) {
@@ -148,17 +180,17 @@ async function refreshLive() {
   status.textContent = "Updating…";
   status.className = "status";
   const results = await Promise.allSettled(
-    LIVE_METALS.map(m => fetchJson(`https://api.gold-api.com/price/${m.symbol}`))
+    LIVE_ASSETS.map(m => fetchJson(`https://api.gold-api.com/price/${m.symbol}`))
   );
   let failed = 0;
   results.forEach((r, i) => {
-    const m = LIVE_METALS[i];
+    const m = LIVE_ASSETS[i];
     if (r.status === "fulfilled" && Number.isFinite(Number(r.value.price))) recordLive(m.symbol, Number(r.value.price));
     else failed++;
     renderCard(m.symbol, m, livePoints(m.symbol));
   });
   if (failed) {
-    status.textContent = `Could not reach the live price feed for ${failed} metal(s); showing saved data.`;
+    status.textContent = `Could not reach the live price feed for ${failed} asset(s); showing saved data.`;
     status.className = "status error";
   } else {
     status.textContent = `Updated ${new Date().toLocaleTimeString()}`;
@@ -207,14 +239,14 @@ async function initRare() {
 }
 
 async function init() {
-  const liveGrid = document.getElementById("live-grid");
-  LIVE_METALS.forEach(m => createCard(liveGrid, m.symbol, m));
+  LIVE_ASSETS.forEach(m => createCard(document.getElementById(m.grid ?? "live-grid"), m.symbol, m));
   try {
     dailyHistory = (await fetchJson("data/history.json")).series ?? {};
   } catch { /* history file is optional */ }
-  LIVE_METALS.forEach(m => renderCard(m.symbol, m, livePoints(m.symbol)));
+  LIVE_ASSETS.forEach(m => renderCard(m.symbol, m, livePoints(m.symbol)));
 
   document.getElementById("refresh").addEventListener("click", refreshLive);
+  document.getElementById("toggle-all").addEventListener("click", toggleAll);
   initRare();
   refreshLive();
   setInterval(refreshLive, REFRESH_MS);
