@@ -1,4 +1,4 @@
-// Assets with a live feed from gold-api.com; `grid` is the section each card goes in.
+// Assets with a live price feed (gold-api.com unless `feed` says otherwise); `grid` is the section each card goes in.
 const LIVE_ASSETS = [
   { symbol: "XAU", name: "Gold", unit: "USD/oz", use: "Connectors, bonding wire, contacts", color: "#c9a227" },
   { symbol: "XAG", name: "Silver", unit: "USD/oz", use: "Solder, conductive pastes, contacts", color: "#8c99a6" },
@@ -7,7 +7,16 @@ const LIVE_ASSETS = [
   { symbol: "HG", name: "Copper", unit: "USD/lb", use: "Wiring, PCBs, motors", color: "#c66b3d" },
   { symbol: "BTC", name: "Bitcoin", unit: "USD", use: "Cryptocurrency", color: "#f7931a", grid: "crypto-grid" },
   { symbol: "ETH", name: "Ethereum", unit: "USD", use: "Cryptocurrency", color: "#627eea", grid: "crypto-grid" },
+  { symbol: "SOL", name: "Solana", unit: "USD", use: "Cryptocurrency", color: "#14b8a6", grid: "crypto-grid", feed: "coinbase" },
+  { symbol: "XRP", name: "XRP", unit: "USD", use: "Cryptocurrency", color: "#5a6b7d", grid: "crypto-grid", feed: "coinbase" },
 ];
+
+async function fetchLivePrice(asset) {
+  if (asset.feed === "coinbase") {
+    return Number((await fetchJson(`https://api.coinbase.com/v2/prices/${asset.symbol}-USD/spot`)).data.amount);
+  }
+  return Number((await fetchJson(`https://api.gold-api.com/price/${asset.symbol}`)).price);
+}
 const RARE_COLORS = ["#2a9d8f", "#e76f51", "#7b6ce0", "#d4a017", "#3a86ff", "#e05a8a", "#6a994e"];
 const REFRESH_MS = 60_000;
 const MIN_RECORD_GAP_MS = 5 * 60_000;
@@ -163,7 +172,10 @@ let dailyHistory = {};
 
 function livePoints(symbol) {
   const local = loadLocal(`live-${symbol}`, []);
-  return toPoints([...(dailyHistory[symbol] ?? []), ...local]);
+  // On days with live readings, prefer them over the daily snapshot so the newest price is always the live one.
+  const liveDays = new Set(local.map(p => new Date(p.t).toLocaleDateString("sv")));
+  const daily = (dailyHistory[symbol] ?? []).filter(p => !liveDays.has(p.date));
+  return toPoints([...daily, ...local]);
 }
 
 function recordLive(symbol, price) {
@@ -180,12 +192,12 @@ async function refreshLive() {
   status.textContent = "Updating…";
   status.className = "status";
   const results = await Promise.allSettled(
-    LIVE_ASSETS.map(m => fetchJson(`https://api.gold-api.com/price/${m.symbol}`))
+    LIVE_ASSETS.map(fetchLivePrice)
   );
   let failed = 0;
   results.forEach((r, i) => {
     const m = LIVE_ASSETS[i];
-    if (r.status === "fulfilled" && Number.isFinite(Number(r.value.price))) recordLive(m.symbol, Number(r.value.price));
+    if (r.status === "fulfilled" && Number.isFinite(r.value)) recordLive(m.symbol, r.value);
     else failed++;
     renderCard(m.symbol, m, livePoints(m.symbol));
   });

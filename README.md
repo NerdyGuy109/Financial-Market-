@@ -3,7 +3,8 @@
 A simple static website that tracks and plots prices of metals used in electronics, plus cryptocurrencies:
 
 - **Live spot prices** (gold, silver, platinum, palladium, copper) and **crypto** (Bitcoin, Ethereum)
-  from the free, keyless [gold-api.com](https://gold-api.com) API, refreshed every minute.
+  from the free, keyless [gold-api.com](https://gold-api.com) API, plus Solana and XRP from Coinbase's
+  public price API, refreshed every minute.
 - **Rare earth & specialty metals** (NdPr, neodymium, dysprosium, terbium, gallium, germanium, indium).
   These have no free public price feed, so prices come from `data/rare-earths.json` plus any
   you enter on the page (saved in your browser).
