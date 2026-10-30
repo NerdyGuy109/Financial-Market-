@@ -1,0 +1,37 @@
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [ccr-e54a8ec1-a0vapa]
+  # Commits made by the price update job don't trigger push events, so redeploy after it runs.
+  workflow_run:
+    workflows: ["Update metal prices"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ccr-e54a8ec1-a0vapa
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
