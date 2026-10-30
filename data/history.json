@@ -1,4 +1,35 @@
 {
   "note": "Daily closing snapshots appended by .github/workflows/update-prices.yml. Prices in USD.",
-  "series": {}
+  "series": {
+    "XAU": [
+      {
+        "date": "2026-10-30",
+        "price": 4010.0
+      }
+    ],
+    "XAG": [
+      {
+        "date": "2026-10-30",
+        "price": 51.617
+      }
+    ],
+    "XPT": [
+      {
+        "date": "2026-10-30",
+        "price": 1469.0
+      }
+    ],
+    "XPD": [
+      {
+        "date": "2026-10-30",
+        "price": 1013.0
+      }
+    ],
+    "HG": [
+      {
+        "date": "2026-10-30",
+        "price": 6.5951
+      }
+    ]
+  }
 }
