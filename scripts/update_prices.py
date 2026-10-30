@@ -4,7 +4,7 @@ import json
 import pathlib
 import urllib.request
 
-SYMBOLS = ["XAU", "XAG", "XPT", "XPD", "HG", "BTC", "ETH"]
+SYMBOLS = ["XAU", "XAG", "XPT", "XPD", "HG", "BTC", "ETH", "SOL", "XRP"]
 HISTORY = pathlib.Path(__file__).resolve().parent.parent / "data" / "history.json"
 
 
