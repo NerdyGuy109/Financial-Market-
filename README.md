@@ -9,6 +9,12 @@ A simple static website that tracks and plots prices of metals used in electroni
   These have no free public price feed, so prices come from `data/rare-earths.json` plus any
   you enter on the page (saved in your browser).
 
+Crypto cards have **timeframe buttons** (Live, 1D, 3D, 1W, 1M). The candle timeframes load about
+five years of daily candles from Coinbase Exchange's free public API (no key), build 3-day, weekly and
+monthly candles from them in the browser, and overlay 20, 50 and 200 moving averages. Click a number to
+show or hide that average, and **SMA/EMA** to switch between simple and exponential averages. Candles are
+cached in your browser for six hours, and each card remembers its own settings.
+
 Each card has a ▾ button to show or hide its chart, and **Hide all charts** at the top collapses
 everything to a compact price list. Your choice is remembered in your browser.
 
