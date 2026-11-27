@@ -70,3 +70,17 @@ button.secondary { background: transparent; color: var(--accent); border: 1px so
 .toggle span { display: inline-block; transition: transform 0.15s; }
 .card.collapsed .toggle span { transform: rotate(-90deg); }
 .card.collapsed .chart-wrap, .card.collapsed .add-form { display: none; }
+
+.view-controls { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-top: 10px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.seg[hidden] { display: none; }
+.seg button { background: transparent; color: var(--text); border-radius: 0; padding: 4px 9px; font-size: 0.82rem; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.ma-controls button[data-ma] { box-shadow: inset 0 -3px 0 var(--ma); }
+.ma-controls button[data-ma][aria-pressed="true"] { background: var(--ma); }
+.ma-controls button[data-ma][aria-pressed="false"] { color: var(--muted); }
+.ma-legend { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 6px 0 0; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ma-legend:empty { display: none; }
+.ma-legend span::before { content: ""; display: inline-block; width: 12px; height: 3px; border-radius: 2px; background: var(--ma); vertical-align: middle; margin-right: 5px; }
+.card.collapsed .view-controls, .card.collapsed .ma-legend { display: none; }
